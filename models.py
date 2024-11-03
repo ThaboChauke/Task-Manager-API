@@ -8,6 +8,7 @@ class Users(db.Model):
     name = db.Column(db.String(200), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     date_added = db.Column(db.DateTime, default=datetime.now())
+    tasks = db.relationship('Tasks', backref='user', lazy=True)
 
     def __repr__(self):
         return '<Name %r>' % self.name
@@ -22,6 +23,7 @@ class Task(db.Model):
     due_date = db.Column(db.DateTime, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.now())
     updated_at = db.Column(db.DateTime, default=datetime.now(), onupdate=datetime.now())
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     def __repr__(self):
         return f"<Task {self.title}>"
