@@ -1,21 +1,28 @@
+from datetime import timedelta
 from os import getenv
+import redis
 from flask import Flask, jsonify
 from flask import request
 from models import db, Users, Tasks
 from dotenv import load_dotenv
-from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity, get_jwt
 
 from utility import convert_date
 
 load_dotenv()
+ACCESS_EXPIRES = timedelta(hours=1)
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
 app.config["SECRET_KEY"] = getenv('SECRET_KEY')
 app.config["JWT_SECRET_KEY"] = getenv('JWT_SECRET_KEY')
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = ACCESS_EXPIRES
 
 db.init_app(app)
 jwt = JWTManager(app)
+
+jwt_redis_blocklist = redis.StrictRedis(host="localhost", port=6379, db=0, decode_responses=True)
+
 
 with app.app_context():
     db.create_all()
@@ -85,6 +92,15 @@ def update_task():
 def delete_task():
     pass
 
+@app.route("/logout", methods=["DELETE"])
+@jwt_required(verify_type=False)
+def logout():
+    token = get_jwt()
+    jti = token["jti"]
+    jwt_redis_blocklist.set(jti, "", ex=ACCESS_EXPIRES)
+
+    # Returns "Access token revoked" or "Refresh token revoked"
+    return jsonify({"msg": "token successfully revoked"})
 
 
 if __name__ == "__main__":

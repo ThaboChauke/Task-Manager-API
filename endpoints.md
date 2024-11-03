@@ -66,10 +66,31 @@
         "error": "Incorrect password"
     }
 ```
-- Username doesn't exist
+- Username doesn't exist{
+    "msg": "token successfully revoked"
+}
 ```json
     {
         "error": "Username doesnt exist"
+    }
+```
+
+## Delete `/logout`
+
+- hit this endpoint to logout
+
+#### Request
+- Authorization token is required for this endpoint
+
+```http request
+Authorization: Bearer <JWT_TOKEN>
+Content-Type: application/json
+```
+
+#### Response
+```json
+    {
+        "msg": "token successfully revoked"
     }
 ```
 
@@ -78,10 +99,12 @@
 
 #### Request:
 - Authorization token is required for this endpoint
+
 ```http request
 Authorization: Bearer <JWT_TOKEN>
 Content-Type: application/json
 ```
+
 ```json
 {
     "title": "Finish Flask Project",
