@@ -27,11 +27,48 @@
 - Email already registered
 ```json
     {
-    "error": "Email already registered"
+      "error": "Email already registered"
     }
 ```
 - Username already taken
-{
-    "error": "Username already exists"
-}
+```json
+    {
+        "error": "Username already exists"
+    }
+```
 
+## Post `/login`
+- hit this endpoint to login
+
+#### Request:
+
+```json
+    {
+      "password": "password123",
+      "username": "johnny"
+    }
+```
+
+#### Successful Response
+
+```json
+    {
+        "success": "Login successful",
+        "token": "token..."
+    }
+```
+
+#### UnSuccessful Response
+
+- Invalid Password
+```json
+    {
+        "error": "Incorrect password"
+    }
+```
+- Username doesn't exist
+```json
+    {
+        "error": "Username doesnt exist"
+    }
+```

@@ -1,16 +1,19 @@
 from os import getenv
 from flask import Flask, jsonify
 from flask import request
-from models import db, Tasks, Users
+from models import db, Users
 from dotenv import load_dotenv
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 
 load_dotenv()
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///manager.db'
 app.config["SECRET_KEY"] = getenv('SECRET_KEY')
+app.config["JWT_SECRET_KEY"] = getenv('JWT_SECRET_KEY')
 
 db.init_app(app)
+jwt = JWTManager(app)
 
 with app.app_context():
     db.create_all()
@@ -19,7 +22,7 @@ with app.app_context():
 def register():
     data = request.get_json()
 
-    existing_user = Users.query.filter_by(email=data['username']).first()
+    existing_user = Users.query.filter_by(username=data['username']).first()
     if existing_user:
         return jsonify({"error": "Username already exists"}), 400
 
@@ -37,7 +40,21 @@ def register():
 
 @app.post("/login")
 def login():
-    pass
+    data = request.get_json()
+
+    username = data['username']
+    password = data['password']
+
+    user = Users.query.filter_by(username=username).first()
+    if not user:
+        return jsonify({"error": "Username doesnt exist"}), 400
+
+    if not user.check_password(password=password):
+        return jsonify({"error": "Incorrect password"}), 400
+
+    assess_token = create_access_token(identity=username)
+    return jsonify({"success": "Login successful","token": assess_token}), 200
+
 
 @app.post("/tasks")
 def create_task():
@@ -54,6 +71,8 @@ def update_task():
 @app.delete("/tasks")
 def delete_task():
     pass
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
