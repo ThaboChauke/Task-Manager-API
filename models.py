@@ -7,6 +7,7 @@ db = SQLAlchemy()
 class Users(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200), nullable=False)
+    username = db.Column(db.String(200), nullable=False, unique=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
     date_added = db.Column(db.DateTime, default=datetime.now())
@@ -20,7 +21,6 @@ class Users(db.Model):
 
     def __repr__(self):
         return '<Name %r>' % self.name
-
 
 
 class Task(db.Model):
