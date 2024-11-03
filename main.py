@@ -1,14 +1,16 @@
 from os import getenv
 from flask import Flask, jsonify
 from flask import request
-from models import db, Users
+from models import db, Users, Tasks
 from dotenv import load_dotenv
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
+
+from utility import convert_date
 
 load_dotenv()
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///manager.db'
+app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
 app.config["SECRET_KEY"] = getenv('SECRET_KEY')
 app.config["JWT_SECRET_KEY"] = getenv('JWT_SECRET_KEY')
 
@@ -52,13 +54,24 @@ def login():
     if not user.check_password(password=password):
         return jsonify({"error": "Incorrect password"}), 400
 
-    assess_token = create_access_token(identity=username)
+    assess_token = create_access_token(identity=user.id)
     return jsonify({"success": "Login successful","token": assess_token}), 200
 
 
 @app.post("/tasks")
+@jwt_required()
 def create_task():
-    pass
+    data = request.get_json()
+    current_user = get_jwt_identity()
+    due_date = convert_date(data['due_date'])
+
+    new_task = Tasks(title=data['title'], description=data['description'], user_id=current_user, due_date=due_date)
+
+    db.session.add(new_task)
+    db.session.commit()
+
+    return jsonify({"msg": "Task created"}), 201
+
 
 @app.get("/tasks")
 def get_tasks():

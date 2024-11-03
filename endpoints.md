@@ -58,7 +58,7 @@
     }
 ```
 
-#### UnSuccessful Response
+#### Unsuccessful Response
 
 - Invalid Password
 ```json
@@ -72,3 +72,46 @@
         "error": "Username doesnt exist"
     }
 ```
+
+## Post `/tasks`
+- hit this endpoint to create a task
+
+#### Request:
+- Authorization token is required for this endpoint
+```http request
+Authorization: Bearer <JWT_TOKEN>
+Content-Type: application/json
+```
+```json
+{
+    "title": "Finish Flask Project",
+    "description": "Complete all remaining routes and test cases",
+    "due_date": "2024-12-01",
+    "priority(optional)" : "low, medium(default), high"
+}
+```
+
+#### Successful Response:
+
+```json
+    {
+        "msg": "Task created"
+    }
+```
+
+#### Unsuccessful Response
+- No Auth header
+```json
+    {
+        "msg": "Missing Authorization Header"
+    }
+```
+
+- Invalid token/key
+```json
+{
+    "msg": "Signature verification failed"
+}
+```
+
+## Get `/tasks`
