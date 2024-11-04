@@ -71,7 +71,6 @@ Here’s the **Usage** section with headers, payloads, and responses entirely mo
 ---
 ## Upcoming Features
 
-- **View Tasks**: Retrieve all tasks for the logged-in user.
 - **Update Task**: Modify task details.
 - **Delete Task**: Remove a task from the database.
 ---
