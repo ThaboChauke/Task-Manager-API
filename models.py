@@ -36,8 +36,20 @@ class Tasks(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.now(), onupdate=datetime.now())
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
+    def to_json(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "description": self.description,
+            "status": self.status,
+            "priority": self.priority,
+            "due_date": self.due_date.isoformat() if self.due_date else None,
+            "user_id": self.user_id
+        }
+
     def __repr__(self):
         return f"<Task {self.title}>"
+
 
 class TokenBlocklist(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -53,3 +65,6 @@ class TokenBlocklist(db.Model):
         server_default=func.now(),
         nullable=False,
     )
+
+    def __repr__(self):
+        return f"<JWT {self.jti}>"
