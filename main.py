@@ -84,14 +84,23 @@ def create_task():
 
 
 @app.get("/tasks")
+@jwt_required()
 def get_tasks():
-    pass
+    current_user = get_jwt_identity()
+    tasks = Tasks.query.filter_by(id=current_user).all()
+
+    tasks_json = [task.to_json() for task in tasks]
+
+    return jsonify({"tasks": tasks_json}), 200
+
 
 @app.put("/tasks")
+@jwt_required()
 def update_task():
     pass
 
 @app.delete("/tasks")
+@jwt_required()
 def delete_task():
     pass
 

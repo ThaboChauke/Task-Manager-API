@@ -138,3 +138,29 @@ Content-Type: application/json
 ```
 
 ## Get `/tasks`
+- hit this endpoint to get all tasks
+
+#### Request:
+- Authorization token is required for this endpoint
+
+```http request
+Authorization: Bearer <JWT_TOKEN>
+Content-Type: application/json
+```
+
+#### Response:
+```json
+{
+    "tasks": [
+        {
+            "description": "Complete all remaining routes and test cases",
+            "due_date": "2024-12-01T08:00:00",
+            "id": 1,
+            "priority": "Medium",
+            "status": "Pending",
+            "title": "Finish Flask Project",
+            "user_id": 1
+        }
+    ]
+}
+```
