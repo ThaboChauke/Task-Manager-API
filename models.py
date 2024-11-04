@@ -1,4 +1,6 @@
+from flask_jwt_extended import get_current_user
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import func
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 
@@ -36,3 +38,18 @@ class Tasks(db.Model):
 
     def __repr__(self):
         return f"<Task {self.title}>"
+
+class TokenBlocklist(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    jti = db.Column(db.String(36), nullable=False, index=True)
+    type = db.Column(db.String(16), nullable=False)
+    user_id = db.Column(
+        db.ForeignKey('users.id'),  # Updated to reference Users
+        default=lambda: get_current_user().id,
+        nullable=False,
+    )
+    created_at = db.Column(
+        db.DateTime,
+        server_default=func.now(),
+        nullable=False,
+    )

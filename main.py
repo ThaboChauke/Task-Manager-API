@@ -1,11 +1,11 @@
-from datetime import timedelta
+from datetime import timedelta, datetime, timezone
 from os import getenv
-import redis
 from flask import Flask, jsonify
 from flask import request
-from models import db, Users, Tasks
+from models import db, Users, Tasks, TokenBlocklist
 from dotenv import load_dotenv
-from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity, get_jwt
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity, get_jwt, \
+    get_current_user
 
 from utility import convert_date
 
@@ -21,11 +21,14 @@ app.config["JWT_ACCESS_TOKEN_EXPIRES"] = ACCESS_EXPIRES
 db.init_app(app)
 jwt = JWTManager(app)
 
-jwt_redis_blocklist = redis.StrictRedis(host="localhost", port=6379, db=0, decode_responses=True)
-
-
 with app.app_context():
     db.create_all()
+
+@jwt.user_lookup_loader
+def user_lookup_callback(_jwt_header, jwt_data):
+    user_id = jwt_data["sub"]
+    return Users.query.get(user_id)
+
 
 @app.post("/register")
 def register():
@@ -92,14 +95,20 @@ def update_task():
 def delete_task():
     pass
 
+
 @app.route("/logout", methods=["DELETE"])
 @jwt_required(verify_type=False)
-def logout():
+def modify_token():
     token = get_jwt()
     jti = token["jti"]
-    jwt_redis_blocklist.set(jti, "", ex=ACCESS_EXPIRES)
+    ttype = token["type"]
+    now = datetime.now(timezone.utc)
 
-    # Returns "Access token revoked" or "Refresh token revoked"
+    current_user = get_current_user()  # This now works since user_lookup_loader is defined
+    token_block = TokenBlocklist(jti=jti, type=ttype, user_id=current_user.id, created_at=now)
+
+    db.session.add(token_block)
+    db.session.commit()
     return jsonify({"msg": "token successfully revoked"})
 
 
