@@ -94,14 +94,40 @@ def get_tasks():
     return jsonify({"tasks": tasks_json}), 200
 
 
-@app.put("/tasks")
+@app.put("/tasks/<int:task_id>")
 @jwt_required()
-def update_task():
-    pass
+def update_task(task_id):
+    current_user = get_jwt_identity()
+    task = Tasks.query.filter_by(id=task_id, user_id=current_user).first()
+
+    if task is None:
+        return jsonify({"error": "Task not found"}), 404
+
+    data = request.get_json()
+
+    if not data:
+        return jsonify({"error": "Invalid data"}), 400
+
+    if 'title' in data:
+        task.title = data['title']
+    if 'description' in data:
+        task.description = data['description']
+    if 'status' in data:
+        task.status = data['status']
+    if 'priority' in data:
+        task.priority = data['priority']
+    if 'due_date' in data:
+        task.due_date = convert_date(data['due_date']) if data['due_date'] else None
+
+    db.session.commit()
+
+    return jsonify({"task_id": task.id, "message": "Updated Successfully"}), 200
+
 
 @app.delete("/tasks")
 @jwt_required()
 def delete_task():
+    current_user = get_jwt_identity()
     pass
 
 

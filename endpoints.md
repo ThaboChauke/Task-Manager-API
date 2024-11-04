@@ -137,6 +137,13 @@ Content-Type: application/json
 }
 ```
 
+- Expired token
+```json
+    {
+        "msg": "Token has expired"
+    }
+```
+
 ## Get `/tasks`
 - hit this endpoint to get all tasks
 
@@ -148,7 +155,7 @@ Authorization: Bearer <JWT_TOKEN>
 Content-Type: application/json
 ```
 
-#### Response:
+#### Successful Response:
 ```json
 {
     "tasks": [
@@ -164,3 +171,94 @@ Content-Type: application/json
     ]
 }
 ```
+
+#### Unsuccessful Response
+- No Auth header
+```json
+    {
+        "msg": "Missing Authorization Header"
+    }
+```
+
+- Invalid token/key
+```json
+{
+    "msg": "Signature verification failed"
+}
+```
+
+- Expired token
+```json
+    {
+        "msg": "Token has expired"
+    }
+```
+
+## Put `/tasks/{task_id}`
+
+- hit this endpoint to update task
+
+#### Request:
+
+- Authorization token is required for this endpoint
+
+```http request
+Authorization: Bearer <JWT_TOKEN>
+Content-Type: application/json
+```
+
+- title & status
+```json
+    {
+    "title": "New Task Title",
+    "status": "In Progress"
+    }
+```
+
+- all fields
+
+```json
+    {
+        "title": "Complete the report",
+        "description": "Finish the quarterly report and send it to the manager.",
+        "status": "Completed",
+        "priority": "Medium",
+        "due_date": "2024-11-15 17:00"
+    }
+```
+
+- due date only
+
+```json
+    {
+        "due_date": "2024-11-20 09:00"
+    }
+```
+
+#### Successful Response
+
+```json
+    {
+        "message": "Updated Successfully",
+        "task_id": 1
+    }
+```
+
+#### Unsuccessful Response
+
+- Task not found
+
+```json
+  {
+      "error": "Task not found"
+  }
+```
+
+- Empty request body
+
+```json
+    {
+        "error": "Invalid data"
+    }
+```
+
