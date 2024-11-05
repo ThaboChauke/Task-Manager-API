@@ -29,6 +29,12 @@ def user_lookup_callback(_jwt_header, jwt_data):
     user_id = jwt_data["sub"]
     return Users.query.get(user_id)
 
+@jwt.token_in_blocklist_loader
+def check_if_token_revoked(_jwt_header, jwt_payload):
+    jti = jwt_payload["jti"]
+    token = TokenBlocklist.query.filter_by(jti=jti).first()
+    return token is not None
+
 
 @app.post("/register")
 def register():
