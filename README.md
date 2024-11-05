@@ -1,31 +1,16 @@
-# Task Manager API
+# 📝 Task Manager API
 
-This project is a RESTful API for managing user tasks, built with Flask. The API supports user registration, login, and task management features, including task creation, viewing, updating, and deletion. User authentication is handled via JWT tokens, ensuring secure access to protected endpoints.
+A RESTful API built with Flask, designed for managing user tasks. This API supports user registration, login, and task management features, all protected with JWT authentication for secure access to user-specific data.
 
-## Features
+## 🌟 Features
 
-- **User RegistrationTask Management API and Login**: Users can register and log in to obtain a JWT token.
-- **JWT Authentication**: Secures task management routes, allowing only authenticated users to access their data.
-- **Task Management**: Create, view, update, and delete tasks with due dates.
+- **User Registration & Login**: Users can register and log in to obtain a JWT token.
+- **JWT Authentication**: Protects task management routes, ensuring only authenticated users can access their data.
+- **Task Management**: Authenticated users can create, view, update, and delete tasks, with optional due dates.
 
-## Endpoints
-- Detailed endpoint documentation can be found in the [endpoints.md](endpoints.md) file.
-
-- **`/register`** (`POST`): Register a new user.
-- **`/login`** (`POST`): Log in a user and receive a JWT token.
-- **`/tasks`**:
-  - **`POST`**: Create a new task (JWT-protected).
-  - **`GET`**: Fetch tasks for the authenticated user (coming soon).
-  - **`PUT`**: Update an existing task (coming soon).
-  - **`DELETE`**: Delete a task (coming soon).
 ---
-## Prerequisites
 
-- **Python 3.8+**
-- **Flask** and related packages (listed in `requirements.txt`)
-- **SQLite** (or another database configured in `SQLALCHEMY_DATABASE_URI`)
----
-## Getting Started
+## 🚀 Quick Start
 
 1. **Clone the repository**:
    ```bash
@@ -33,8 +18,8 @@ This project is a RESTful API for managing user tasks, built with Flask. The API
    cd Task-Manager-API
    ```
 
-2. **Set up environment variables**: Create a `.env` file with the following keys:
-   ```
+2. **Set up environment variables**: Create a `.env` file in the root directory with the following keys:
+   ```plaintext
    DATABASE_URL=<your-database-url>
    SECRET_KEY=<your-secret-key>
    JWT_SECRET_KEY=<your-jwt-secret-key>
@@ -51,13 +36,37 @@ This project is a RESTful API for managing user tasks, built with Flask. The API
    ```
 
 5. The API will be available at `http://localhost:5000`.
+
 ---
-## Usage
 
-Here’s the **Usage** section with headers, payloads, and responses entirely moved to `endpoints.md`:
+## 📚 Endpoints
 
+Detailed endpoint documentation, including request headers, payloads, and responses, can be found in [`endpoints.md`](endpoints.md).
 
-## Usage
+### Summary of Endpoints
+
+- **User Registration**: `POST /register`
+- **User Login**: `POST /login`
+- **Task Management**:
+  - `POST /tasks`: Create a new task (JWT-protected)
+  - `GET /tasks`: Fetch all tasks for the authenticated user
+  - `PUT /tasks/<task_id>`: Update a specific task
+  - `DELETE /tasks/<task_id>`: Delete a specific task
+  - **Logout**: `DELETE /logout` (JWT-protected, revokes token)
+
+---
+
+## 🧩 Prerequisites
+
+- **Python 3.8+**
+- **Flask** and related packages (installed via `requirements.txt`)
+- **SQLite** (or another configured database)
+
+---
+
+## 📘 Usage Overview
+
+The full **Usage** section, with headers, payloads, and responses, has been moved to `endpoints.md` for clarity. Here’s a quick summary:
 
 ### User Registration
 - **Endpoint**: `POST /register`
@@ -65,14 +74,24 @@ Here’s the **Usage** section with headers, payloads, and responses entirely mo
 ### User Login
 - **Endpoint**: `POST /login`
 
-### Task Creation (JWT-Protected)
-- **Endpoint**: `POST /tasks`
+### Task Management (JWT-Protected)
+- **Create Task**: `POST /tasks`
+- **View Tasks**: `GET /tasks`
+- **Update Task**: `PUT /tasks/<task_id>`
+- **Delete Task**: `DELETE /tasks/<task_id>`
 
 ---
 
-## License
+## 📄 License
 
 This project is licensed under the [MIT License](LICENSE).
 
 ---
 
+## 👥 Contributing
+
+Contributions are welcome! Please follow the typical [GitHub flow](https://guides.github.com/introduction/flow/) and submit a pull request for any additions or improvements.
+
+---
+
+Enjoy building and managing tasks with the Task Manager API!
