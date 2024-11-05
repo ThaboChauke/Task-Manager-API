@@ -109,7 +109,7 @@ Content-Type: application/json
 {
     "title": "Finish Flask Project",
     "description": "Complete all remaining routes and test cases",
-    "due_date": "2024-12-01",
+    "due_date": "2024-12-01 18:00",
     "priority(optional)" : "low, medium(default), high"
 }
 ```
@@ -262,3 +262,30 @@ Content-Type: application/json
     }
 ```
 
+## Delete `/tasks/{task_id}`
+
+- hit this endpoint to delete a task
+
+#### Request:
+
+- Authorization token is required for this endpoint
+
+```http request
+Authorization: Bearer <JWT_TOKEN>
+Content-Type: application/json
+```
+
+#### Successful Response
+
+```json
+    {
+        "msg": "Task deleted"
+    }
+```
+#### Unsuccessful Response
+
+```json
+    {
+        "error": "Task not found"
+    }
+```

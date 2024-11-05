@@ -50,7 +50,7 @@ This project is a RESTful API for managing user tasks, built with Flask. The API
    flask run
    ```
 
-   The API will be available at `http://localhost:5000`.
+5. The API will be available at `http://localhost:5000`.
 ---
 ## Usage
 
@@ -69,10 +69,7 @@ Here’s the **Usage** section with headers, payloads, and responses entirely mo
 - **Endpoint**: `POST /tasks`
 
 ---
-## Upcoming Features
 
-- **Delete Task**: Remove a task from the database.
----
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
