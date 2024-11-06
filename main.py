@@ -13,7 +13,7 @@ load_dotenv()
 ACCESS_EXPIRES = timedelta(hours=1)
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
+app.config["SQLALCHEMY_DATABASE_URI"] = getenv("SQLALCHEMY_DATABASE_URI")
 app.config["SECRET_KEY"] = getenv('SECRET_KEY')
 app.config["JWT_SECRET_KEY"] = getenv('JWT_SECRET_KEY')
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = ACCESS_EXPIRES
@@ -160,4 +160,4 @@ def modify_token():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000)

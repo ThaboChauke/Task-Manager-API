@@ -37,6 +37,21 @@ A RESTful API built with Flask, designed for managing user tasks. This API suppo
 
 5. The API will be available at `http://localhost:5000`.
 
+
+### Running with Docker
+
+1. Build the Docker image:
+
+    ```bash
+        docker build -t myapp .
+    ```
+2. Run the container:
+
+    ```bash
+        sudo docker run --env-file .env -p 5000:5000 myapp
+    ```
+3. The API will now be accessible at http://localhost:5000.
+
 ---
 
 ## 📚 Endpoints
@@ -64,6 +79,8 @@ A RESTful API built with Flask, designed for managing user tasks. This API suppo
 - **Python 3.8+**
 - **Flask** and related packages (installed via `requirements.txt`)
 - **SQLite** (or another configured database)
+- **Docker**
+
 
 ---
 
