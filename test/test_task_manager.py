@@ -29,8 +29,20 @@ class TaskManagerAPITestCase(unittest.TestCase):
                                     json={'title': 'New Task', 'description': 'Task description',
                                           'due_date': '2024-11-10 18:00'},
                                     headers={'Authorization': f'Bearer {self.token}'})
-        self.assertEqual(response.status_code, 201)
+
+        self.assertEqual(201, response.status_code)
         self.assertIn('Task created', str(response.data))
+
+    def test_create_task_unauthorized(self):
+        invalid_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTczMDgzMDQ4OSwianRpIjoiNzQxNjFjMDQtNzU5Yy00MTc4LWJkYzItMTAxYzU4MmJjN2NiIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MSwibmJmIjoxNzMwODMwNDg5LCJjc3JmIjoiY2M1NjAzY2EtOTE2NC00ZTNjLWEyOGUtNjRmMzI1ZGM2OTYzIiwiZXhwIjoxNzMwODM0MDg5fQ.o1nZyeY8XrnC77SPQwXy4ogCyIqar-gXMdQ6LChAneM"
+
+        response = self.client.post('/tasks',
+                                    json={'title': 'New Task', 'description': 'Task description',
+                                          'due_date': '2024-11-10 18:00'},
+                                    headers={'Authorization': f'Bearer {invalid_token}'})
+
+        self.assertEqual(401, response.status_code)
+        self.assertIn('Token has expired', str(response.data))
 
 
 if __name__ == '__main__':
