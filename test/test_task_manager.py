@@ -1,12 +1,11 @@
 import unittest
-from statistics import pstdev
-from token import EQUAL
 
 from main import app, db, Users
 from flask_jwt_extended import create_access_token
 
 
 class TaskManagerAPITestCase(unittest.TestCase):
+
     def setUp(self):
         self.app = app
         self.app.config['TESTING'] = True
@@ -54,8 +53,18 @@ class TaskManagerAPITestCase(unittest.TestCase):
         self.assertIsInstance(response.json.get('tasks'), list)
 
 
-    def delete_task(self):
-        pass
+    def test_delete_task(self):
+        response = self.client.post('/tasks',
+                                    json={'title': 'New Task', 'description': 'Task description',
+                                          'due_date': '2024-11-10 18:00'},
+                                    headers={'Authorization': f'Bearer {self.token}'})
+
+        self.assertEqual(201, response.status_code)
+
+        delete_response = self.client.delete('/tasks/1', headers={'Authorization': f'Bearer {self.token}'})
+        self.assertEqual(200, delete_response.status_code)
+        self.assertIn('Task deleted', str(delete_response.data))
+
 
     def update_task(self):
         pass
