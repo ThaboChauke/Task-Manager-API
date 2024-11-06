@@ -17,6 +17,14 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      SQLALCHEMY_DATABASE_URI: ${{ secrets.SQLALCHEMY_DATABASE_URI }}
+      JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+      FLASK_APP: "main.py"
+      FLASK_ENV: "testing"
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      
+
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python 3.10
