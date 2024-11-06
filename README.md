@@ -54,6 +54,9 @@ A RESTful API built with Flask, designed for managing user tasks. This API suppo
 
 ---
 
+### GitHub Actions Workflow
+The CI pipeline is set up to run unit tests automatically using the workflow defined in [yml file](.github/workflows/python-app.yml). Every time code is pushed to the repository, the workflow triggers and executes the tests.
+
 ## 📚 Endpoints
 
 - Detailed endpoint documentation, including request headers, payloads, and responses, can be found in [`endpoints.md`](endpoints.md).
