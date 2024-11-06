@@ -37,7 +37,6 @@ class TaskManagerAPITestCase(unittest.TestCase):
 
     def test_create_task_unauthorized(self):
         invalid_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTczMDgzMDQ4OSwianRpIjoiNzQxNjFjMDQtNzU5Yy00MTc4LWJkYzItMTAxYzU4MmJjN2NiIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MSwibmJmIjoxNzMwODMwNDg5LCJjc3JmIjoiY2M1NjAzY2EtOTE2NC00ZTNjLWEyOGUtNjRmMzI1ZGM2OTYzIiwiZXhwIjoxNzMwODM0MDg5fQ.o1nZyeY8XrnC77SPQwXy4ogCyIqar-gXMdQ6LChAneM"
-
         response = self.client.post('/tasks',
                                     json={'title': 'New Task', 'description': 'Task description',
                                           'due_date': '2024-11-10 18:00'},
@@ -52,22 +51,28 @@ class TaskManagerAPITestCase(unittest.TestCase):
         self.assertEqual(200, response.status_code)
         self.assertIsInstance(response.json.get('tasks'), list)
 
-
     def test_delete_task(self):
         response = self.client.post('/tasks',
                                     json={'title': 'New Task', 'description': 'Task description',
                                           'due_date': '2024-11-10 18:00'},
                                     headers={'Authorization': f'Bearer {self.token}'})
-
         self.assertEqual(201, response.status_code)
 
         delete_response = self.client.delete('/tasks/1', headers={'Authorization': f'Bearer {self.token}'})
         self.assertEqual(200, delete_response.status_code)
         self.assertIn('Task deleted', str(delete_response.data))
 
+    def test_update_task(self):
+        response = self.client.post('/tasks',
+                                    json={'title': 'New Task', 'description': 'Task description',
+                                          'due_date': '2024-11-10 18:00'},
+                                    headers={'Authorization': f'Bearer {self.token}'})
+        self.assertEqual(201, response.status_code)
 
-    def update_task(self):
-        pass
+        update_task = self.client.put('/tasks/1',json={'title': 'Old Task'},
+                                      headers={'Authorization': f'Bearer {self.token}'})
+        self.assertEqual(200, update_task.status_code)
+        self.assertIn('Updated Successfully', str(update_task.data))
 
     def non_existent_user(self):
         pass
