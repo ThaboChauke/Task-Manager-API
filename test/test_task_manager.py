@@ -1,4 +1,7 @@
 import unittest
+from statistics import pstdev
+from token import EQUAL
+
 from main import app, db, Users
 from flask_jwt_extended import create_access_token
 
@@ -43,6 +46,25 @@ class TaskManagerAPITestCase(unittest.TestCase):
 
         self.assertEqual(401, response.status_code)
         self.assertIn('Token has expired', str(response.data))
+
+    def test_get_tasks(self):
+        response = self.client.get('/tasks', headers={'Authorization': f'Bearer {self.token}'})
+
+        self.assertEqual(200, response.status_code)
+        self.assertIsInstance(response.json.get('tasks'), list)
+
+
+    def delete_task(self):
+        pass
+
+    def update_task(self):
+        pass
+
+    def non_existent_user(self):
+        pass
+
+    def register_user(self):
+        pass
 
 
 if __name__ == '__main__':
