@@ -74,8 +74,13 @@ class TaskManagerAPITestCase(unittest.TestCase):
         self.assertEqual(200, update_task.status_code)
         self.assertIn('Updated Successfully', str(update_task.data))
 
-    def non_existent_user(self):
-        pass
+    def test_non_existent_user(self):
+        response = self.client.post('/login',
+                                    json={'username': 'John', 'password': 'password'},)
+
+        self.assertEqual(400, response.status_code)
+        self.assertIn('Username doesnt exist', str(response.data))
+
 
     def register_user(self):
         pass
