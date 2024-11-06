@@ -74,16 +74,20 @@ class TaskManagerAPITestCase(unittest.TestCase):
         self.assertEqual(200, update_task.status_code)
         self.assertIn('Updated Successfully', str(update_task.data))
 
-    def test_non_existent_user(self):
-        response = self.client.post('/login',
-                                    json={'username': 'John', 'password': 'password'},)
+    def test_invalid_login(self):
+        response = self.client.post('/login',json={'username': 'John', 'password': 'password'},)
 
         self.assertEqual(400, response.status_code)
         self.assertIn('Username doesnt exist', str(response.data))
 
 
-    def register_user(self):
-        pass
+    def test_register_user(self):
+        response = self.client.post('/register',
+                                    json={'email': 'jane@email.com' , 'username': 'Jane', 'password': 'password',
+                                          'name': 'Jane Doe'})
+
+        self.assertEqual(200, response.status_code)
+        self.assertIn('Registration successful', str(response.data))
 
 
 if __name__ == '__main__':
