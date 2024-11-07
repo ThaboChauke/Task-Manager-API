@@ -1,22 +1,28 @@
 from datetime import timedelta, datetime, timezone
 from os import getenv
-from flask import Flask, jsonify
-from flask import request
+from flask import Flask, jsonify, request, send_from_directory
 from models import db, Users, Tasks, TokenBlocklist
 from dotenv import load_dotenv
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity, get_jwt, \
     get_current_user
+from flask_swagger_ui import get_swaggerui_blueprint
 
 from utility import convert_date
 
 load_dotenv()
+
 ACCESS_EXPIRES = timedelta(hours=1)
+SWAGGER_URL = '/swagger'
+API_DOCS_URL = '/static/swagger.yaml'
+
+swaggerui_blueprint = get_swaggerui_blueprint(SWAGGER_URL, API_DOCS_URL, config={ 'app_name': 'Task Manager API'})
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = getenv("SQLALCHEMY_DATABASE_URI")
 app.config["SECRET_KEY"] = getenv('SECRET_KEY')
 app.config["JWT_SECRET_KEY"] = getenv('JWT_SECRET_KEY')
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = ACCESS_EXPIRES
+app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 
 db.init_app(app)
 jwt = JWTManager(app)
@@ -35,6 +41,9 @@ def check_if_token_revoked(_jwt_header, jwt_payload):
     token = TokenBlocklist.query.filter_by(jti=jti).first()
     return token is not None
 
+@app.route('/static/<path:path>')
+def send_static(path):
+    return send_from_directory('static',path)
 
 @app.post("/register")
 def register():
