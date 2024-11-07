@@ -1,6 +1,6 @@
 from datetime import timedelta, datetime, timezone
 from os import getenv
-from flask import Flask, jsonify, request, send_from_directory, render_template
+from flask import Flask, jsonify, request, send_from_directory, redirect
 from models import db, Users, Tasks, TokenBlocklist
 from dotenv import load_dotenv
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity, get_jwt, \
@@ -44,7 +44,7 @@ def check_if_token_revoked(_jwt_header, jwt_payload):
 
 @app.route('/')
 def index_page():
-    return render_template('index.html')
+    return redirect(SWAGGER_URL)
 
 @app.route('/static/<path:path>')
 def send_static(path):
