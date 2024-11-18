@@ -6,3 +6,4 @@ Flask-JWT-Extended~=4.6.0
 redis~=5.2.0
 flask_sqlalchemy
 flask-swagger-ui
+gunicorn
