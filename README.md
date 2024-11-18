@@ -60,9 +60,9 @@ The CI pipeline is set up to run unit tests automatically using the workflow def
 ## 📚 Endpoints
 
 - Detailed endpoint documentation, including request headers, payloads, and responses, can be found in [`endpoints.md`](endpoints.md).
-- Access endpoints in Postman
+- Access endpoints in Swagger
 
-    [<img src="https://run.pstmn.io/button.svg" alt="Run In Postman" style="width: 128px; height: 32px;">](https://god.gw.postman.com/run-collection/34710539-c41de9a5-19a5-4daf-bcd1-9146f5cfc31a?action=collection%2Ffork&source=rip_markdown&collection-url=entityId%3D34710539-c41de9a5-19a5-4daf-bcd1-9146f5cfc31a%26entityType%3Dcollection%26workspaceId%3Dae458e47-48f9-4540-8629-8b6de6c7df43)
+    [![Swagger UI](https://img.shields.io/badge/Swagger-UI-green)](https://task-manager-api-o274.onrender.com/swagger/)
 
 ### Summary of Endpoints
 
