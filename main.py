@@ -7,7 +7,7 @@ from flask_jwt_extended import JWTManager, create_access_token, jwt_required, ge
     get_current_user
 from flask_swagger_ui import get_swaggerui_blueprint
 
-from utility import convert_date
+from utility import convert_date, find_re
 
 load_dotenv()
 
@@ -54,6 +54,9 @@ def send_static(path):
 @app.post("/register")
 def register():
     data = request.get_json()
+
+    if not find_re(data['name']):
+        return jsonify({"error": "Name includes symbols"}), 400
 
     existing_user = Users.query.filter_by(username=data['username']).first()
     if existing_user:
